@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+    "google-workspace-steward":  {
+    "type": "http",
+    "url": "https://gws-steward.zuhalsystems.ai/mcp"
+    }
+  }
+}
