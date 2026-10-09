@@ -3,11 +3,11 @@ name: google-workspace-steward
 description: Find what is using Google Workspace pooled storage. Use when the user asks for the largest Google Drive files in their organization or for one user, who is using the most Drive storage, or why their Workspace storage is full. Runs an org-wide scan through the google-workspace-steward tools and presents a ranked report.
 ---
 
-# Workspace Steward
+# Google Workspace Steward
 
-Workspace Steward reads Google Drive **metadata only** (file name, size, owner, type,
-last modified) across a Google Workspace organization. It never reads file contents
-and cannot open, move, share or delete files.
+Google Workspace Steward reads Google Drive **metadata only** (file name, size, owner,
+type, last modified) across a Google Workspace organization. It never reads file
+contents and cannot open, move, share or delete files.
 
 ## Tools
 
@@ -29,20 +29,30 @@ and cannot open, move, share or delete files.
    ("120 of 300 users scanned"). Don't call it in a tight loop; check a few times,
    and if the scan is still running after several checks, give the user the
    `job_id` and offer to fetch the results when they ask again.
-4. When `status` is `done`, call `get_scan_results`.
+4. Act on `status`:
+   - `done`: call `get_scan_results`.
+   - `failed`: tell the user the scan failed and show the `error` field. Don't retry
+     automatically; offer to start a new scan if they want.
+   - `queued` or `running`: keep following progress as in step 3.
 
 If the user only asks about one person, use `largest_files_for_user` with their
 email instead of a full scan.
 
 ## Presenting the report
 
+The finished report from `get_scan_results` has the ranked files in `results` and
+its own `warnings` list. Use those. Don't repeat warnings you saw in
+`get_scan_status` while the scan was running; the report's `warnings` is the final
+list.
+
 - Start with one line of totals: users scanned, files in the report,
   `total_size_human`.
-- Then a ranked table: rank, file name, owner, size (convert `bytes` to KB/MB/GB),
-  type (simplify `mimeType`, e.g. "Video (MP4)", "Google Doc"), last modified (date only).
+- Then a ranked table from `results`: rank, file name, owner, size (convert `bytes`
+  to KB/MB/GB), type (simplify `mimeType`, e.g. "Video (MP4)", "Google Doc"), last
+  modified (date only).
 - If the user asks who uses the most, also group the rows by `owner` and sum their sizes.
-- List any `warnings` (for example users that could not be scanned) after the table.
-  Never drop them silently.
+- List the report's `warnings` (for example users that could not be scanned) after
+  the table. Never drop them silently.
 - Only owned files in each user's My Drive are covered. Shared drives are not
   scanned yet, so say so if the user asks about them.
 - Suggest concrete next steps, such as asking the owners of the largest files to
@@ -65,7 +75,7 @@ calling `largest_files_for_user` for every user.
 ## Errors
 
 - **"not authenticated"**: the user needs to sign in. In Claude this happens when
-  connecting the Workspace Steward connector; ask them to reconnect it.
+  connecting the Google Workspace Steward connector; ask them to reconnect it.
 - **"no service-account key registered for <domain>"**: the organization hasn't
   been set up yet. A Google Workspace **super admin** has to register their
   organization's service-account key at https://gws-steward.zuhalsystems.ai/onboard.
