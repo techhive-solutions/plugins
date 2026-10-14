@@ -1,0 +1,22 @@
+{
+  "name": "techhive-plugins",
+  "owner": {
+    "name": "TechHive Solutions"
+  },
+  "metadata": {
+    "description": "Claude Code plugins from TechHive Solutions and Zuhal Systems Inc."
+  },
+  "plugins": [
+    {
+      "name": "google-workspace-steward",
+      "source": "./plugins/google-workspace-steward",
+      "description": "Find what is using Google Workspace pooled storage: the largest Google Drive files across your organization and its shared drives, the users using the most storage, and how storage is growing. For Google Workspace super admins. Read-only, metadata only; connects to the hosted Steward server.",
+      "author": {
+        "name": "Zuhal Systems Inc",
+        "url": "https://zuhalsystems.ai"
+      },
+      "homepage": "https://gws-steward.zuhalsystems.ai",
+      "category": "productivity"
+    }
+  ]
+}
