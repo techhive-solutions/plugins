@@ -59,10 +59,11 @@ list.
 - Then a ranked table from `results`: rank, file name, owner, size (convert `bytes`
   to KB/MB/GB), type (simplify `mimeType`, e.g. "Video (MP4)", "Google Doc"), last
   modified (date only).
-- Files in shared drives are in `shared_drive_results`, with the drive's name
-  instead of an owner. Show them as a separate table. `shared_drives` lists those
-  drives: its `top_n_bytes` is only the sum of the drive's largest files, not the
-  drive's total size.
+- Files in shared drives are in `shared_drive_results`: each has a `drive_id`
+  and a `drive_link` instead of an owner. Show them as a separate table, with the
+  link. Drive names aren't available (Steward only reads metadata), so refer to a
+  drive by its link. `shared_drives` lists those drives: its `top_n_bytes` is only
+  the sum of the drive's largest files, not the drive's total size.
 - If the user asks who uses the most, also group the rows by `owner` and sum their
   sizes.
 - List the report's `warnings` (for example users or drives that could not be
