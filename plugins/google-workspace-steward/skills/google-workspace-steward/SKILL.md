@@ -59,15 +59,31 @@ list.
 - Then a ranked table from `results`: rank, file name, owner, size (convert `bytes`
   to KB/MB/GB), type (simplify `mimeType`, e.g. "Video (MP4)", "Google Doc"), last
   modified (date only).
-- Files in shared drives are in `shared_drive_results`: each has a `drive_id`
-  and a `drive_link` instead of an owner. Show them as a separate table, with the
-  link. Drive names aren't available (Steward only reads metadata), so refer to a
-  drive by its link. `shared_drives` lists those drives: its `top_n_bytes` is only
-  the sum of the drive's largest files, not the drive's total size.
-- If the user asks who uses the most, also group the rows by `owner` and sum their
-  sizes.
+- Files in shared drives are in `shared_drive_results`. Each row has `drive_id`
+  and `drive_link` instead of an owner, plus the file's `name`, `bytes`,
+  `mimeType` and `modified`. Show them in a second table: rank, file name, drive,
+  size, type, last modified. In the drive column, don't print the raw URL: label
+  the drives "Drive 1", "Drive 2", ... in order of first appearance and link each
+  label to its `drive_link`.
+- Shared-drive names aren't available. Steward reads with the
+  `drive.metadata.readonly` scope, which can't read a shared drive's name. If the
+  user asks which drive is which, say so once; the link opens the drive for
+  anyone who has access to it.
+- `shared_drives` summarizes those drives. Each entry's `id` is the same value as
+  `drive_id` in `shared_drive_results`, and `link` is its drive link, so give it
+  the same "Drive N" label. Its `name` is only "Shared drive <id>", not the
+  drive's real name. `top_n_bytes` is only the sum of the drive's largest files,
+  not the drive's total size.
+- Older Steward servers return the drive's name instead (`drive` on each row and
+  no `drive_link`). When a row has `drive` and no `drive_link`, show that name.
+- If the user asks who uses the most, group the `results` rows by `owner` and the
+  `shared_drive_results` rows by `drive_id`, and sum the sizes in each group. List
+  shared drives by their "Drive N" label; don't count their files under a person.
 - List the report's `warnings` (for example users or drives that could not be
-  scanned) after the tables. Never drop them silently.
+  scanned) after the tables. Never drop them silently. A warning about a shared
+  drive names it "Shared drive <id>": use its "Drive N" label if it's in the
+  tables, otherwise link it as https://drive.google.com/drive/folders/<id> under
+  a short label, never as a bare ID.
 - Suggest concrete next steps, such as asking the owners of the largest files to
   delete or archive them. Steward can't do it for them.
 
