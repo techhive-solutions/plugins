@@ -1,6 +1,6 @@
 {
   "name": "google-workspace-steward",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Find what is using Google Workspace pooled storage: the largest Google Drive files across your organization and its shared drives, the users using the most storage, and how storage is growing. For Google Workspace super admins. Read-only, metadata only; connects to the hosted Steward server.",
   "author": {
     "name": "Zuhal Systems Inc",
